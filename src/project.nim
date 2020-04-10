@@ -16,8 +16,12 @@ when isMainModule:
     p3: Vec[DIM] = [3.0,1.0]
     p4: Vec[DIM] = [4.0,2.0]
 
-  echo $kdt.treeFromPoints(@[p1,p2,p3])
-  echo $kdt.treeFromPoints(@[p1,p2,p3,p4])
+  var
+    pts1 = @[p1,p2,p3]
+    pts2 = @[p4,p1,p2,p3]
+
+  echo $kdt.treeFromPoints(pts1)
+  echo $kdt.treeFromPoints(pts2)
 
   var colors = @[Color(r:0.9, g:0.4, b:0.0, a: 1.0),
                  Color(r:0.9, g:0.4, b:0.2, a: 1.0),

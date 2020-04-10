@@ -1,4 +1,5 @@
 #import options
+import algorithm
 
 import util
 
@@ -35,30 +36,40 @@ func emptyTree*[K: usize](): Tree[K] =
   result.dim = K
   result.height = 0
 
+func sortBy[K: usize](d: uint): auto = (proc(v1,v2: Vec[K]):int = system.cmp(v1[d],v2[d]))
+
 # replace echo statements with actual tree insertion and then turn proc into func
-proc treeFromPoints*[K: usize](points: seq[Vec[K]]): Tree[K] = # Assumes the sequence of points is sorted
+proc treeFromPoints*[K: usize](points: var seq[Vec[K]]): Tree[K] = # Assumes the sequence of points is sorted
   let size = points.len
   if size == 1:
     return newTree[K](points[0])
+
+  points.sort(sortBy[K](0))
+  echo points
   result.dim = K
   let mid = size div 2
 
-  # ... add in midpoint
-  echo mid
-  # ...
+  result.root = Node[K](val: points[mid])
+  result.height += 1
 
-  if size mod 2 == 1:
-    for i in countup(1,mid):
-      if mid + i < size:
-        echo (mid + i)
-      if mid - i >= 0:
-        echo (mid - i)
-  else:
-    for i in countup(1,mid):
-      if mid-i >= 0:
-        echo (mid - i)
-      if mid+i < size:
-        echo (mid + i)
+#  # ... add in midpoint
+#  echo mid
+#  result.root = Node[K](val: points[mid])
+#  result.height += 1
+#  # ...
+#
+#  if size mod 2 == 1:
+#    for i in countup(1,mid):
+#      if mid + i < size:
+#        echo (mid + i)
+#      if mid - i >= 0:
+#        echo (mid - i)
+#  else:
+#    for i in countup(1,mid):
+#      if mid-i >= 0:
+#        echo (mid - i)
+#      if mid+i < size:
+#        echo (mid + i)
 
 func showNode[K: usize](n: Node[K]): string =
   result = "Node(val: " & $n.val
