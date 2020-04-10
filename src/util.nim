@@ -1,0 +1,1 @@
+type usize* = static[uint]
