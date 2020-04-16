@@ -1,5 +1,6 @@
 import parseopt
 import strutils
+import random
 
 when isMainModule:
   var
@@ -23,4 +24,19 @@ when isMainModule:
     of cmdEnd:
       echo ""
   echo "generating file with " & $n & " " & $k & "-dimensional points from range [" & $(-r) & ", " & $r & "]"
-  # TODO
+
+  randomize()
+  var points: seq[string] = @[]
+  for i in 1..n:
+    var s = ""
+    for j in 0..(k-1):
+      s.add($rand((-r)..r))
+      if j < (k-1):
+        s.add(" ")
+    points.add(s)
+  let f = open("dataset.txt", fmWrite)
+
+  for point in points:
+    f.writeLine(point)
+  f.close()
+
