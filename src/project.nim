@@ -1,11 +1,23 @@
 import kdtree as kdt
 import nns
+import readData
+
 import plotly
 import chroma
 
 
 when isMainModule:
   const DIM: uint = 2
+
+  var
+    data = readDataset[DIM]()
+    tree = kdt.treeFromPoints(data)
+
+  
+
+when false:
+  #echo $data
+  # -------------------------------------------------
   let v: Vec[DIM] = [1.0,2.0]
   let t: Tree[DIM] = kdt.new_tree[DIM](v)
   echo $t
