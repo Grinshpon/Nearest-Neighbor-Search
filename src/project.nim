@@ -20,8 +20,10 @@ when isMainModule:
     pts1 = @[p1,p2,p3]
     pts2 = @[p4,p1,p2,p3]
 
-  echo $kdt.treeFromPoints(pts1)
-  echo $kdt.treeFromPoints(pts2)
+  #echo $kdt.treeFromPoints(pts2)
+  let tree = kdt.treeFromPoints(pts1)
+  echo $tree
+  echo $tree.nearestSearch(p4,euclidean_squared[DIM])
 
   var colors = @[Color(r:0.9, g:0.4, b:0.0, a: 1.0),
                  Color(r:0.9, g:0.4, b:0.2, a: 1.0),

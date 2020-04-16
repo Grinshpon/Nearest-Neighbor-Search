@@ -4,31 +4,18 @@ import algorithm
 import util
 
 type
-  Ring = object
-    d: uint #dim
-    n: uint #val
-
-func addr(lhs: Ring, rhs: uint): Ring =
-  result.d = lhs.d
-  result.n = (lhs.n + rhs) mod lhs.d
-
-func subr(lhs: Ring, rhs: uint): Ring =
-  result.d = lhs.d
-  result.n = (lhs.n - rhs) mod lhs.d
-
-type
   Vec*[K: usize] = array[K, float]
   Node[K: usize] = ref object
-    val: Vec[K]
-    plane: Ring
-    left,right: Node[K]#Option[Node[K]]
+    val*: Vec[K]
+    plane*: uint
+    left*,right*: Node[K]#Option[Node[K]]
   Tree*[K: usize] = object
-    root: Node[K]
-    dim: uint
-    height: uint
+    root*: Node[K]
+    dim*: uint
+    height*: uint
 
 func newTree*[K: usize](v: Vec[K]): Tree[K] =
-  result.root = Node[K](val: v, plane: Ring(d: K, n: 0), left: nil, right: nil)
+  result.root = Node[K](val: v, plane: 0, left: nil, right: nil)
   result.dim = K
   result.height = 1
 
@@ -41,11 +28,11 @@ func sortBy[K: usize](d: uint): auto = (proc(v1,v2: Vec[K]):int = system.cmp(v1[
 proc insert[K: usize](node: var Node[K], points: var seq[Vec[K]]): uint =
   if points.len == 0 or node == nil:
     return 0
-  let r = addr(node.plane,1)
+  let r = (node.plane + 1) mod K
   var
     (lPoints, rPoints) = split(points, points.len div 2)
-  lPoints.sort(sortBy[K](r.n))
-  rPoints.sort(sortBy[K](r.n))
+  lPoints.sort(sortBy[K](r))
+  rPoints.sort(sortBy[K](r))
   let
     lMid = lPoints.len div 2
     rMid = rPoints.len div 2
@@ -55,8 +42,7 @@ proc insert[K: usize](node: var Node[K], points: var seq[Vec[K]]): uint =
     node.right = Node[K](val: rPoints[rMid], plane: r)
   return 1+max(node.left.insert(lPoints), node.right.insert(rPoints))
 
-# replace echo statements with actual tree insertion and then turn proc into func
-proc treeFromPoints*[K: usize](points: var seq[Vec[K]]): Tree[K] = # Assumes the sequence of points is sorted
+proc treeFromPoints*[K: usize](points: var seq[Vec[K]]): Tree[K] =
   let size = points.len
   if size == 1:
     return newTree[K](points[0])
@@ -66,30 +52,11 @@ proc treeFromPoints*[K: usize](points: var seq[Vec[K]]): Tree[K] = # Assumes the
   result.dim = K
   let mid = size div 2
 
-  result.root = Node[K](val: points[mid], plane: Ring(d: K,n: 0))
+  result.root = Node[K](val: points[mid], plane: 0)
   result.height += 1
 
   let h = result.root.insert(points)
   result.height += h
-
-#  # ... add in midpoint
-#  echo mid
-#  result.root = Node[K](val: points[mid])
-#  result.height += 1
-#  # ...
-#
-#  if size mod 2 == 1:
-#    for i in countup(1,mid):
-#      if mid + i < size:
-#        echo (mid + i)
-#      if mid - i >= 0:
-#        echo (mid - i)
-#  else:
-#    for i in countup(1,mid):
-#      if mid-i >= 0:
-#        echo (mid - i)
-#      if mid+i < size:
-#        echo (mid + i)
 
 func showNode[K: usize](n: Node[K]): string =
   result = "Node(val: " & $n.val
