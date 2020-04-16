@@ -11,19 +11,21 @@ when isMainModule:
   echo $t
 
   let
-    p1: Vec[DIM] = [1.0,1.0]
-    p2: Vec[DIM] = [2.0,2.0]
-    p3: Vec[DIM] = [3.0,1.0]
-    p4: Vec[DIM] = [4.0,2.0]
+    p1: Vec[DIM] = [0.0,-1.0]
+    p2: Vec[DIM] = [1.0,2.0]
+    p3: Vec[DIM] = [0.5,0.0]
+    p4: Vec[DIM] = [0.0,1.0]
+    p5: Vec[DIM] = [0.0,0.0]
 
   var
     pts1 = @[p1,p2,p3]
     pts2 = @[p4,p1,p2,p3]
+    pts3 = @[p1,p2,p3,p4]
 
   #echo $kdt.treeFromPoints(pts2)
-  let tree = kdt.treeFromPoints(pts1)
+  let tree = kdt.treeFromPoints(pts3)
   echo $tree
-  echo $tree.nearestSearch(p4,euclidean_squared[DIM])
+  echo $tree.nearestSearch(p5,euclidean_squared[DIM])
 
   var colors = @[Color(r:0.9, g:0.4, b:0.0, a: 1.0),
                  Color(r:0.9, g:0.4, b:0.2, a: 1.0),

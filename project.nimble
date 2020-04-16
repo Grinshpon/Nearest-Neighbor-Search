@@ -6,7 +6,7 @@ description   = "Nearest Neighbor Search using kd-trees"
 license       = "MIT"
 srcDir        = "src"
 installExt    = @["nim"]
-bin           = @["project"]
+bin           = @["project", "genDataset"]
 
 
 
