@@ -1,9 +1,10 @@
 import kdtree as kdt
 import nns
 import readData
+import plot
 
-import plotly
-import chroma
+#import plotly
+#import chroma
 
 
 when isMainModule:
@@ -12,8 +13,13 @@ when isMainModule:
   var
     data = readDataset[DIM]()
     tree = kdt.treeFromPoints(data)
+  let
+    qPoint: Vec[DIM] = [4.0,5.0]
+    nPoint = tree.nearestSearch(qPoint, euclidean_squared[DIM])
 
-  
+  echo $tree
+  tree.plotTree2(qPoint, nPoint, -1000.0,1000.0)
+
 
 when false:
   #echo $data
@@ -38,27 +44,5 @@ when false:
   let tree = kdt.treeFromPoints(pts3)
   echo $tree
   echo $tree.nearestSearch(p5,euclidean_squared[DIM])
+  # --------------------------------------------------
 
-  var colors = @[Color(r:0.9, g:0.4, b:0.0, a: 1.0),
-                 Color(r:0.9, g:0.4, b:0.2, a: 1.0),
-                 Color(r:0.2, g:0.9, b:0.2, a: 1.0),
-                 Color(r:0.1, g:0.7, b:0.1, a: 1.0),
-                 Color(r:0.0, g:0.5, b:0.1, a: 1.0)]
-  var d = Trace[int](mode: PlotMode.LinesMarkers, `type`: PlotType.Scatter)
-  var size = @[16.int]
-  d.marker =Marker[int](size:size, color: colors)
-  d.xs = @[1, 2, 3, 4, 5]
-  d.ys = @[1, 2, 1, 9, 5]
-  d.text = @["hello", "data-point", "third", "highest", "<b>bold</b>"]
-
-  var e = Trace[int](mode: PlotMode.LinesMarkers, `type`: PlotType.Scatter)
-  e.marker = Marker[int](size:size, color: colors)
-  e.xs = @[1,3]
-  e.ys = @[2,4]
-  e.text = @["one", "two"]
-
-  var layout = Layout(title: "testing", width: 1200, height: 400,
-                      xaxis: Axis(title:"my x-axis"),
-                      yaxis:Axis(title: "y-axis too"), autosize:false)
-  var p = Plot[int](layout:layout, traces: @[d,e])
-  #p.show()
